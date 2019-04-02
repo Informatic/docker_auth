@@ -3,6 +3,8 @@
 // data/github_auth.tmpl
 // data/github_auth_result.tmpl
 // data/google_auth.tmpl
+// data/oauth2_auth.tmpl
+// data/oauth2_auth_result.tmpl
 // DO NOT EDIT!
 
 package authn
@@ -313,6 +315,162 @@ func dataGoogle_authTmpl() (*asset, error) {
 	return a, nil
 }
 
+var _dataOauth2_authTmpl = []byte(`<!doctype html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Docker Registry Authentication</title>
+  <style>
+    .github-icon {
+      background-image: url('data:image/svg+xml;utf8,<svg version="1.1" id="Github" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px"  width="155px" height="155px" viewBox="0 0 155 155" enable-background="new 0 0 155 155" xml:space="preserve"><path id="path26" fill="#cccccc" d="M78.012,3.04c-41.685,0-75.486,33.794-75.486,75.486c0,33.35,21.629,61.645,51.622,71.625 c3.772,0.699,5.157-1.637,5.157-3.631c0-1.799-0.07-7.746-0.103-14.054c-21,4.566-25.431-8.906-25.431-8.906  c-3.434-8.724-8.381-11.045-8.381-11.045c-6.849-4.685,0.517-4.589,0.517-4.589c7.58,0.533,11.571,7.78,11.571,7.78 c6.732,11.538,17.659,8.202,21.966,6.273c0.678-4.878,2.634-8.208,4.793-10.094c-16.767-1.907-34.392-8.382-34.392-37.305 c0-8.24,2.949-14.975,7.778-20.261c-0.784-1.901-3.368-9.579,0.731-19.977c0,0,6.34-2.027,20.764,7.739 c6.021-1.672,12.479-2.511,18.895-2.541c6.414,0.03,12.877,0.869,18.909,2.541c14.407-9.766,20.737-7.739,20.737-7.739  c4.109,10.397,1.525,18.075,0.742,19.977c4.84,5.286,7.768,12.021,7.768,20.261c0,28.993-17.659,35.376-34.469,37.245 c2.708,2.342,5.121,6.936,5.121,13.979c0,10.1-0.087,18.229-0.087,20.715c0,2.01,1.358,4.363,5.185,3.623 c29.976-9.993,51.578-38.277,51.578-71.617C153.496,36.833,119.699,3.04,78.012,3.04"/></svg>');
+      background-repeat: no-repeat;
+      background-size: contain;
+      display: inline-block;
+      width: 25px;
+      height: 25px;
+    }
+    body {
+      color: #000;
+      background: #fff;
+      font-family: sans-serif;
+      padding: 4em 4em;
+    }
+    a { color: #000; }
+    #panel p { text-align:center; }
+    #login-with-github {
+      color: #fff;
+      background-color: #2a2a2a;
+      font-size: 1em;
+      text-decoration: none;
+      line-height: 3em;
+      padding: 0.5em 2em 0.5em 2em;
+      display: inline-block;
+      height: 3em;
+      border-radius: 0.75em;
+      cursor: pointer;
+      transition: all 0.25s;
+    }
+    #login-with-github:hover {
+      background-color: #444444;
+    }
+    #login-with-github:active {
+      background-color: #101010;
+    }
+    #login-with-github .github-icon {
+      margin: 0 0.5em 0 0;
+      position: relative;
+      top: 5px;
+    }
+    #login-with-github code {
+      font-size: 1.4em;
+    }
+    #revoke-access {
+      color: #666;
+      font-size: 0.8em;
+      text-decoration: none;
+    }
+    #revoke-access:hover {
+      text-decoration: underline;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="panel">
+    <p>
+    <a id="login-with-github" href="{{.AuthorizeUrl}}?scope=profile:read&client_id={{.ClientId}}&response_type=code&redirect_uri={{.RedirectUrl}}">
+        Login
+      </a>
+    </p>
+  </div>
+</body>
+</html>
+`)
+
+func dataOauth2_authTmplBytes() ([]byte, error) {
+	return _dataOauth2_authTmpl, nil
+}
+
+func dataOauth2_authTmpl() (*asset, error) {
+	bytes, err := dataOauth2_authTmplBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "data/oauth2_auth.tmpl", size: 2742, mode: os.FileMode(420), modTime: time.Unix(1, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
+var _dataOauth2_auth_resultTmpl = []byte(`<!doctype html>
+
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Docker Registry Authentication</title>
+  <style>
+    body {
+      color: #000;
+      background: #fff;
+      font-family: sans-serif;
+      padding: 4em 4em;
+    }
+    hr {
+      border: none;
+      border-top: 1px solid #ccc;
+    }
+    .message code {
+      font-size: 1.4em;
+      background: #ccc;
+      border-radius: 0.5em;
+      padding: 0.25em 0.5em;
+      margin: 0 0.25em 0 0.25em;
+    }
+    .command {
+      font-size: 2em;
+      line-height: 2em;
+      color: #222;
+      background: #fafafa;
+      padding: 1em 1em 1.2em 1em;
+      margin: 1em 0;
+      border-radius: 0.5em;
+      text-shadow: 0px 1px 0px #fff;
+    }
+    .command span {
+      user-select: none;
+      -moz-user-select: none;
+      -webkit-user-select: none;
+      -ms-user-select: none;
+    }
+  </style>
+</head>
+<body>
+  <p class="message">
+    You are successfully authenticated for the Docker Registry.
+    Use the following username and password to login into the registry:
+  </p>
+  <hr>
+  <pre class="command"><span>$ </span>docker login -u {{.Username}} -p {{.Password}} {{if .RegistryUrl}}{{.RegistryUrl}}{{else}}docker.example.com{{end}}</pre>
+</body>
+</html>
+`)
+
+func dataOauth2_auth_resultTmplBytes() ([]byte, error) {
+	return _dataOauth2_auth_resultTmpl, nil
+}
+
+func dataOauth2_auth_resultTmpl() (*asset, error) {
+	bytes, err := dataOauth2_auth_resultTmplBytes()
+	if err != nil {
+		return nil, err
+	}
+
+	info := bindataFileInfo{name: "data/oauth2_auth_result.tmpl", size: 1212, mode: os.FileMode(420), modTime: time.Unix(1, 0)}
+	a := &asset{bytes: bytes, info: info}
+	return a, nil
+}
+
 // Asset loads and returns the asset for the given name.
 // It returns an error if the asset could not be found or
 // could not be loaded.
@@ -368,6 +526,8 @@ var _bindata = map[string]func() (*asset, error){
 	"data/github_auth.tmpl": dataGithub_authTmpl,
 	"data/github_auth_result.tmpl": dataGithub_auth_resultTmpl,
 	"data/google_auth.tmpl": dataGoogle_authTmpl,
+	"data/oauth2_auth.tmpl": dataOauth2_authTmpl,
+	"data/oauth2_auth_result.tmpl": dataOauth2_auth_resultTmpl,
 }
 
 // AssetDir returns the file names below a certain
@@ -414,6 +574,8 @@ var _bintree = &bintree{nil, map[string]*bintree{
 		"github_auth.tmpl": &bintree{dataGithub_authTmpl, map[string]*bintree{}},
 		"github_auth_result.tmpl": &bintree{dataGithub_auth_resultTmpl, map[string]*bintree{}},
 		"google_auth.tmpl": &bintree{dataGoogle_authTmpl, map[string]*bintree{}},
+		"oauth2_auth.tmpl": &bintree{dataOauth2_authTmpl, map[string]*bintree{}},
+		"oauth2_auth_result.tmpl": &bintree{dataOauth2_auth_resultTmpl, map[string]*bintree{}},
 	}},
 }}
 

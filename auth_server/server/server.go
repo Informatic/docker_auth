@@ -44,6 +44,7 @@ type AuthServer struct {
 	authorizers    []authz.Authorizer
 	ga             *authn.GoogleAuth
 	gha            *authn.GitHubAuth
+	oa2            *authn.OAuth2
 }
 
 func NewAuthServer(c *Config) (*AuthServer, error) {
@@ -90,6 +91,14 @@ func NewAuthServer(c *Config) (*AuthServer, error) {
 		}
 		as.authenticators = append(as.authenticators, gha)
 		as.gha = gha
+	}
+	if c.OAuth2 != nil {
+		oa2, err := authn.NewOAuth2(c.OAuth2)
+		if err != nil {
+			return nil, err
+		}
+		as.authenticators = append(as.authenticators, oa2)
+		as.oa2 = oa2
 	}
 	if c.LDAPAuth != nil {
 		la, err := authn.NewLDAPAuth(c.LDAPAuth)
@@ -342,6 +351,8 @@ func (as *AuthServer) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		as.ga.DoGoogleAuth(rw, req)
 	case req.URL.Path == path_prefix+"/github_auth" && as.gha != nil:
 		as.gha.DoGitHubAuth(rw, req)
+	case req.URL.Path == path_prefix+"/oauth2" && as.oa2 != nil:
+		as.oa2.DoOAuth2(rw, req)
 	default:
 		http.Error(rw, "Not found", http.StatusNotFound)
 		return
@@ -351,16 +362,19 @@ func (as *AuthServer) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 // https://developers.google.com/identity/sign-in/web/server-side-flow
 func (as *AuthServer) doIndex(rw http.ResponseWriter, req *http.Request) {
 	switch {
-		case as.ga != nil:
-			rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-			fmt.Fprintf(rw, "<h1>%s</h1>\n", as.config.Token.Issuer)
-			fmt.Fprint(rw, `<p><a href="/google_auth">Login with Google account</a></p>`)
-		case as.gha != nil:
-			url := as.config.Server.PathPrefix + "/github_auth"
-			http.Redirect(rw, req, url, 301)
-		default:
-			rw.Header().Set("Content-Type", "text/html; charset=utf-8")
-			fmt.Fprintf(rw, "<h1>%s</h1>\n", as.config.Token.Issuer)
+	case as.ga != nil:
+		rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(rw, "<h1>%s</h1>\n", as.config.Token.Issuer)
+		fmt.Fprint(rw, `<p><a href="/google_auth">Login with Google account</a></p>`)
+	case as.gha != nil:
+		url := as.config.Server.PathPrefix + "/github_auth"
+		http.Redirect(rw, req, url, 301)
+	case as.oa2 != nil:
+		url := as.config.Server.PathPrefix + "/oauth2"
+		http.Redirect(rw, req, url, 301)
+	default:
+		rw.Header().Set("Content-Type", "text/html; charset=utf-8")
+		fmt.Fprintf(rw, "<h1>%s</h1>\n", as.config.Token.Issuer)
 	}
 }
 
